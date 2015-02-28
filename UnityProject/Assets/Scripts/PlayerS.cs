@@ -8,6 +8,17 @@ public class PlayerS : MonoBehaviour {
 	public float speed;
 	public bool isMoving;
 
+	//determines collisions
+	bool canMoveNorth;
+	bool canMoveEast;
+	bool canMoveSouth; 
+	bool canMoveWest; 
+
+	//0 - north 1 - east 2-south 3-west; 
+	//this int determines the direction you are facing. 
+	int dirFacing; 
+
+	
 	private float increment;
 
 	// Use this for initialization
@@ -60,5 +71,11 @@ public class PlayerS : MonoBehaviour {
 
 		// HOPEFULLY I NEVER DO ANYTHING THAT TERRIBLE AGAIN
 
+	}
+
+	void move(int dir){
+		if (dir == dirFacing) {
+				} else 
+			dirFacing = dir;
 	}
 }

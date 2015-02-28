@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Moving.cs" />
      <Compile Include="Assets\Player.cs" />
      <Compile Include="Assets\Scripts\PlayerS.cs" />
      <None Include="Assets\Materials\placeholder.txt" />
