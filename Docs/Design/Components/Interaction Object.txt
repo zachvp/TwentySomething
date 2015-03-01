@@ -1,0 +1,2 @@
+Interactible Object
+    Superclass script that defines type of interaction

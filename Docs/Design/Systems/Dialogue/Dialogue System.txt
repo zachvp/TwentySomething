@@ -1,0 +1,8 @@
+Dialogue System
+    Back end
+        Interaction trigger - returns interaction type NPC
+        The dialogue text to use
+        Way to advance dialogue (is it pressing an option, single button like Pokemon, etc...)
+    Front end
+        UI element displaying the conversation
+        UI element displaying any choices the user may have

@@ -1,0 +1,7 @@
+Interaction Trigger
+    Upon pressing interaction button, see if the object in front of player-character is Interact
+        check the tag of the object
+    Check that it has an interactible component
+        Throw error if it's tagged as interactible but has no interactible script component
+    Check the Interactible type
+        dialogue, mini-game, etc
