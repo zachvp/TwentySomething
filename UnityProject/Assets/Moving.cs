@@ -9,7 +9,7 @@ public class Moving : MonoBehaviour {
 	public bool isMoving;
 
 	enum FacingDirection { NEUTRAL, UP, DOWN, LEFT, RIGHT };
-	FacingDirection _facingDirection = FacingDirection.NEUTRAL;
+	FacingDirection _facingDirection;
 
 	enum MoveState { STOPPED, CHECK_MOVE, MOVING };
 	MoveState _moveState;
@@ -23,9 +23,6 @@ public class Moving : MonoBehaviour {
 
 	float startTime; 
 	float journeyLength;
-
-	//determines collisions
-	bool canMove; 
 
 	void Awake() {
 
@@ -106,31 +103,5 @@ public class Moving : MonoBehaviour {
 
 	void LerpToDestination() {
 		gameObject.transform.position = _destination;
-	}
-
-	bool CheckTile(int Dir) {
-		Vector2 direction = Vector2.zero;
-		//this is here to get directions for the raycast.
-		if (Dir == 0) direction = Vector2.up;
-		if (Dir == 1) direction = Vector2.right;
-		if (Dir == 2) direction = Vector2.up * -1;
-		if (Dir == 3) direction = Vector2.right * -1;
-
-
-		RaycastHit2D checkForward = Physics2D.Raycast (gameObject.transform.position, direction, 1.0f);
-		Debug.Log (gameObject.name + ": checkforward " + checkForward.ToString());
-		if (checkForward.collider.CompareTag ("wall") || checkForward.collider.CompareTag("thing")) {
-			canMove = false; 
-			Debug.Log("I'M RUNNING INTO A WALL!"); 
-		}
-		else
-		{
-			canMove = true;
-		}
-
-		if (checkForward.collider.CompareTag("thing")){
-			//code for interactibe objects will have to go here. Case by case basis. 
-		}
-		return canMove;
 	}
 }
