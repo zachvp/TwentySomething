@@ -16,7 +16,7 @@ public class Moving : MonoBehaviour {
 
 	RaycastHit2D _checkMove;
 	Vector2 _checkMoveDirection;
-	float _checkMoveDistance = 32.0f;
+	float _checkMoveDistance = 1.0f;
 
 	Vector2 _destination;
 	float _moveDistance = 1.0f;
@@ -78,6 +78,10 @@ public class Moving : MonoBehaviour {
 				_moveState = MoveState.MOVING;
 			} else {
 				// check the type of object in front of the player
+				string objectTag = _checkMove.rigidbody.tag;
+				if (objectTag.Equals("wall")) {
+
+				}
 			}
 		}
 
