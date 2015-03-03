@@ -232,6 +232,7 @@ GameObject:
   - 114: {fileID: 123153826}
   - 114: {fileID: 123153828}
   - 114: {fileID: 123153829}
+  - 114: {fileID: 123153830}
   m_Layer: 0
   m_Name: Playa
   m_TagString: Untagged
@@ -296,7 +297,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 123153824}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d165c0bb6d5a4987bdd0eb214ad10bc, type: 3}
   m_Name: 
@@ -313,6 +314,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b906aa8b07c084c718d3a02ef5b4e0de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &123153830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 123153824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d374e6b687564aada5950f4b26b750f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: .200000003
 --- !u!1 &141115725
 GameObject:
   m_ObjectHideFlags: 0
