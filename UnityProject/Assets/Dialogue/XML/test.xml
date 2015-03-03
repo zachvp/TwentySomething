@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogue>
+    <name> NPC - Esteban </name>
+    <question> Do you like hugs? </question>
+    <response stamina="5"> Of course </response>
+    <response> YES </response>
+</dialogue>
