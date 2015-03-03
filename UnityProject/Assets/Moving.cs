@@ -7,6 +7,7 @@ public class Moving : MonoBehaviour {
 	public Vector3 endPoint;
 	public float speed = 0.1f;
 	public bool isMoving;
+	public bool canMove = true;
 
 	enum FacingDirection { NEUTRAL, UP, DOWN, LEFT, RIGHT };
 	FacingDirection _facingDirection;
@@ -35,36 +36,36 @@ public class Moving : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//Set the facing direction based on input
-		if (Input.GetKeyDown (KeyCode.UpArrow)) {
-			//Debug.Log(gameObject.name + ": pressed " + KeyCode.UpArrow);
-
-			_facingDirection = FacingDirection.UP;
-			_moveState = MoveState.CHECK_MOVE;
-
-			_checkMoveDirection = Vector2.up;
-		} else if (Input.GetKeyDown (KeyCode.DownArrow)) {
-			//Debug.Log(gameObject.name + ": pressed " + KeyCode.DownArrow);
-
-			_facingDirection = FacingDirection.DOWN;
-			_moveState = MoveState.CHECK_MOVE;
-
-			_checkMoveDirection = -1.0f * Vector2.up;
-		} else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			//Debug.Log(gameObject.name + ": pressed " + KeyCode.LeftArrow);
-
-			_facingDirection = FacingDirection.LEFT;
-			_moveState = MoveState.CHECK_MOVE;
-
-			_checkMoveDirection = -1.0f * Vector2.right;
-		} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
-			//Debug.Log(gameObject.name + ": pressed " + KeyCode.RightArrow);
-
-			_facingDirection = FacingDirection.RIGHT;
-			_moveState = MoveState.CHECK_MOVE;
-
-			_checkMoveDirection = Vector2.right;
-		}
+			//Set the facing direction based on input
+			if (Input.GetKeyDown (KeyCode.UpArrow)) {
+				//Debug.Log(gameObject.name + ": pressed " + KeyCode.UpArrow);
+				
+				_facingDirection = FacingDirection.UP;
+				_moveState = MoveState.CHECK_MOVE;
+				
+				_checkMoveDirection = Vector2.up;
+			} else if (Input.GetKeyDown (KeyCode.DownArrow)) {
+				//Debug.Log(gameObject.name + ": pressed " + KeyCode.DownArrow);
+				
+				_facingDirection = FacingDirection.DOWN;
+				_moveState = MoveState.CHECK_MOVE;
+				
+				_checkMoveDirection = -1.0f * Vector2.up;
+			} else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+				//Debug.Log(gameObject.name + ": pressed " + KeyCode.LeftArrow);
+				
+				_facingDirection = FacingDirection.LEFT;
+				_moveState = MoveState.CHECK_MOVE;
+				
+				_checkMoveDirection = -1.0f * Vector2.right;
+			} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
+				//Debug.Log(gameObject.name + ": pressed " + KeyCode.RightArrow);
+				
+				_facingDirection = FacingDirection.RIGHT;
+				_moveState = MoveState.CHECK_MOVE;
+				
+				_checkMoveDirection = Vector2.right;
+			}
 
 		// Set the move state
 		if (_moveState == MoveState.CHECK_MOVE) {
@@ -78,6 +79,10 @@ public class Moving : MonoBehaviour {
 				string objectTag = _checkMove.rigidbody.tag;
 				if (objectTag.Equals("wall")) {
 
+				}
+				if (objectTag.Equals("thing")) {
+					_checkMove.transform.GetComponent<Notes>().Display();
+					canMove = false;
 				}
 			}
 		}
