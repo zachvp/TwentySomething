@@ -16,45 +16,52 @@ using System.Xml;
 using System.IO;
 using System.Collections.Generic;
 
-public sealed class TSDialogueParser {
-	public static string debug;
+namespace Dialogue {
+	public sealed class TSDialogueParser {
+		public static string debug;
 
-	private static readonly TSDialogueParser instance = new TSDialogueParser();
-	private static string path;
+		private static readonly TSDialogueParser _instance = new TSDialogueParser();
+		private static string _path;
 
-	//private static Dictionary<>;
+		private const string kPathToXMLDirectory = "/UnityProject/Assets/Dialogue/XML/";
+		private const string kXMLExtension 		 = ".xml";
 
-	private const string kPathToXMLDirectory = "/UnityProject/Assets/Dialogue/XML/";
-	private const string kXMLExtension 		 = ".xml";
-		
-	private TSDialogueParser () {}
+		private const string kDialogueNodeName   = "dialogue";
+		private const string kNameNodeName   	 = "name";
+		private const string kQuestionNodeName 	 = "question";
+		private const string kResponseNodeName 	 = "response";
 
-	public static TSDialogueParser Instance { get { return instance; } }
+		private const string kStaminaAttributeName = "stamina";
+			
+		private TSDialogueParser () {}
 
-	public void Parse(string filename) {
-		Console.Write("Parse ");
-		Console.WriteLine(filename);
+		public static TSDialogueParser Instance { get { return _instance; } }
 
-		XmlDocument doc = new XmlDocument();
-		path = Directory.GetParent(Environment.CurrentDirectory).FullName + 
-			   kPathToXMLDirectory + filename + kXMLExtension;
-		//debug = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase );
-		//debug = System.IO.Path.GetDirectoryName(
-		doc.Load(path);
+		public void Parse(string filename) {
+			Console.Write("Parse ");
+			Console.WriteLine(filename);
 
-		XmlNode rootNode = doc.DocumentElement.SelectSingleNode("/dialogue");
+			XmlDocument doc = new XmlDocument();
+			_path = Directory.GetParent(Environment.CurrentDirectory).FullName + 
+				   kPathToXMLDirectory + filename + kXMLExtension;
+			//debug = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase );
+			//debug = System.IO.Path.GetDirectoryName(
+			doc.Load(_path);
 
-		XmlNode nameNode = rootNode.SelectSingleNode("name"); debug += nameNode.InnerText + "\n";
-		XmlNode questionNode = rootNode.SelectSingleNode("question"); debug += questionNode.InnerText + "\n\n";
-		
-		XmlNodeList responses = rootNode.SelectNodes("response");
+			XmlNode rootNode = doc.DocumentElement.SelectSingleNode("/" + kDialogueNodeName);
 
-		foreach (XmlNode response in responses) {
-			debug += response.InnerText;
-			if (response.Attributes["stamina"] != null)
-				debug += " - " + response.Attributes["stamina"].Value.ToString() + " stamina\n";
+			XmlNode nameNode = rootNode.SelectSingleNode(kNameNodeName); debug += nameNode.InnerText + "\n";
+			XmlNode questionNode = rootNode.SelectSingleNode(kQuestionNodeName); debug += questionNode.InnerText + "\n\n";
+			
+			XmlNodeList responses = rootNode.SelectNodes(kResponseNodeName);
+
+			foreach (XmlNode response in responses) {
+				debug += response.InnerText;
+				if (response.Attributes[kStaminaAttributeName] != null)
+					debug += " - " + response.Attributes[kStaminaAttributeName].Value.ToString() + " stamina\n";
+			}
+
+			//debug = nameNode.Attributes["stamina"].Value;
 		}
-
-		//debug = nameNode.Attributes["stamina"].Value;
 	}
 }

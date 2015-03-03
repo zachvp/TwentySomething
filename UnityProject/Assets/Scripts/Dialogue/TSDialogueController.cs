@@ -7,11 +7,11 @@ public class TSDialogueController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		TSDialogueParser.Instance.Parse("test");
-		Debug.Log(gameObject.name + " " + TSDialogueParser.debug);
+		Dialogue.TSDialogueParser.Instance.Parse("test");
+		Debug.Log(gameObject.name + " " +Dialogue.TSDialogueParser.debug);
 
 		// update the UI
-		_textDialogOutput.text = TSDialogueParser.debug;
+		_textDialogOutput.text = Dialogue.TSDialogueParser.debug;
 	}
 	
 	// Update is called once per frame
