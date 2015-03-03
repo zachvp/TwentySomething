@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Dialogue;
 
 public class TSDialogueController : MonoBehaviour {
 	public Text _textDialogOutput;
+	public string _filename;
+
+	private TSDialogueData _dialogueData;
 
 	// Use this for initialization
 	void Start () {
-		Dialogue.TSDialogueParser.Instance.Parse("test");
-		Debug.Log(gameObject.name + " " +Dialogue.TSDialogueParser.debug);
+		_dialogueData = TSDialogueParser.Instance.Parse(_filename);
 
 		// update the UI
-		_textDialogOutput.text = Dialogue.TSDialogueParser.debug;
+		_textDialogOutput.text = TSDialogueParser.debug;
 	}
 	
 	// Update is called once per frame

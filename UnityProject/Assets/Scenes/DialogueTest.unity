@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _textDialogOutput: {fileID: 1805311262}
+  _filename: test
 --- !u!4 &1216490677
 Transform:
   m_ObjectHideFlags: 0
