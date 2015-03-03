@@ -36,19 +36,37 @@ public class Moving : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+<<<<<<< Updated upstream
 			//Set the facing direction based on input
 			if (Input.GetKeyDown (KeyCode.UpArrow)) {
+=======
+		//Set the facing direction based on input
+		/*
+		float h = Input.GetAxis ("Horizontal");
+		float v = Input.GetAxis ("Vertical");
+
+		if (v != 0) {
+			if(v > 0) {
+>>>>>>> Stashed changes
 				//Debug.Log(gameObject.name + ": pressed " + KeyCode.UpArrow);
 				
 				_facingDirection = FacingDirection.UP;
 				_moveState = MoveState.CHECK_MOVE;
+<<<<<<< Updated upstream
 				
 				_checkMoveDirection = Vector2.up;
 			} else if (Input.GetKeyDown (KeyCode.DownArrow)) {
+=======
+
+				_checkMoveDirection = Vector2.up;
+			}
+			else {
+>>>>>>> Stashed changes
 				//Debug.Log(gameObject.name + ": pressed " + KeyCode.DownArrow);
 				
 				_facingDirection = FacingDirection.DOWN;
 				_moveState = MoveState.CHECK_MOVE;
+<<<<<<< Updated upstream
 				
 				_checkMoveDirection = -1.0f * Vector2.up;
 			} else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
@@ -59,6 +77,14 @@ public class Moving : MonoBehaviour {
 				
 				_checkMoveDirection = -1.0f * Vector2.right;
 			} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
+=======
+
+				_checkMoveDirection = -1.0f * Vector2.up;
+			}
+		}
+		if (h !=0 ) {
+			if (h > 0) {
+>>>>>>> Stashed changes
 				//Debug.Log(gameObject.name + ": pressed " + KeyCode.RightArrow);
 				
 				_facingDirection = FacingDirection.RIGHT;
@@ -66,6 +92,50 @@ public class Moving : MonoBehaviour {
 				
 				_checkMoveDirection = Vector2.right;
 			}
+<<<<<<< Updated upstream
+=======
+			else {
+				//Debug.Log(gameObject.name + ": pressed " + KeyCode.LeftArrow);
+				
+				_facingDirection = FacingDirection.LEFT;
+				_moveState = MoveState.CHECK_MOVE;
+				
+				_checkMoveDirection = -1.0f * Vector2.right;
+			}
+		}*/
+
+
+		if (Input.GetKeyDown (KeyCode.UpArrow)) {
+			//Debug.Log(gameObject.name + ": pressed " + KeyCode.UpArrow);
+
+			_facingDirection = FacingDirection.UP;
+			_moveState = MoveState.CHECK_MOVE;
+
+			_checkMoveDirection = Vector2.up;
+		} else if (Input.GetKeyDown (KeyCode.DownArrow)) {
+			//Debug.Log(gameObject.name + ": pressed " + KeyCode.DownArrow);
+
+			_facingDirection = FacingDirection.DOWN;
+			_moveState = MoveState.CHECK_MOVE;
+
+			_checkMoveDirection = -1.0f * Vector2.up;
+		} else if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			//Debug.Log(gameObject.name + ": pressed " + KeyCode.LeftArrow);
+
+			_facingDirection = FacingDirection.LEFT;
+			_moveState = MoveState.CHECK_MOVE;
+
+			_checkMoveDirection = -1.0f * Vector2.right;
+		} else if (Input.GetKeyDown (KeyCode.RightArrow)) {
+			//Debug.Log(gameObject.name + ": pressed " + KeyCode.RightArrow);
+
+			_facingDirection = FacingDirection.RIGHT;
+			_moveState = MoveState.CHECK_MOVE;
+
+			_checkMoveDirection = Vector2.right;
+		}
+>>>>>>> Stashed changes
+
 
 		// Set the move state
 		if (_moveState == MoveState.CHECK_MOVE) {
