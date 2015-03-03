@@ -8,6 +8,7 @@ public class Moving : MonoBehaviour {
 	public float speed = 0.1f;
 	public bool isMoving;
 	public bool canMove = true;
+	bool prepedtoInteract = false;
 
 	enum FacingDirection { NEUTRAL, UP, DOWN, LEFT, RIGHT };
 	FacingDirection _facingDirection;
@@ -151,12 +152,20 @@ public class Moving : MonoBehaviour {
 
 				}
 				if (objectTag.Equals("thing")) {
-					_checkMove.transform.GetComponent<Notes>().Display();
-					canMove = false;
+					prepedtoInteract = true;
 				}
 			}
 		}
 
+		//
+		if(prepedtoInteract) {
+			if(Input.GetKeyDown(KeyCode.Space)) {
+				
+				_checkMove.transform.GetComponent<Notes>().Display();
+				canMove = false;
+			}
+		}
+		
 		// Handle the move state
 		if (_moveState == MoveState.MOVING) {
 			_destination = gameObject.transform.position;
