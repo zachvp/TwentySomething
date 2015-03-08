@@ -13,7 +13,7 @@ public class Door : MonoBehaviour {
 	void Update () {
 		if(gameObject.transform.position.x == player.transform.position.x && 
 		   gameObject.transform.position.y == player.transform.position.y ){
-			Application.LoadLevel("DialogueTest"); 
+			Application.LoadLevel(targetScene); 
 		}
 	}
 }

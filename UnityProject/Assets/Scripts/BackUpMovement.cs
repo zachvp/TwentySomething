@@ -13,6 +13,9 @@ public class BackUpMovement : MonoBehaviour {
 
 	public float _speed = 0.4f;
 
+	public Sprite[] sprites; 
+	SpriteRenderer myRenderer; 
+
 	//testing out double tap to run
 	public float tapSpeed = 0.5f;
 	private float lastTapTime = 0f; 
@@ -46,48 +49,74 @@ public class BackUpMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_destination = gameObject.transform.position;
+		myRenderer = gameObject.GetComponent<SpriteRenderer>(); 
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+		if (_moveState == MoveState.STOPPED) {
+			switch (_facingDirection) {
+			case FacingDirection.NEUTRAL: 
+				myRenderer.sprite = sprites[0]; 
+				break;
+			case FacingDirection.DOWN: 
+				myRenderer.sprite = sprites[0]; 
+				break;
+			case FacingDirection.UP: 
+				myRenderer.sprite = sprites[2]; 
+				break; 
+			case FacingDirection.LEFT:
+				myRenderer.sprite = sprites[3]; 
+				break;
+			case FacingDirection.RIGHT:
+				myRenderer.sprite = sprites[1]; 
+				break; 
+			}
+		}
+
 		//check if player has let go of the move button
 		if(Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow)) {
 			runReleased = true;
+			/*
 			if((Time.time - lastTapTime) < tapSpeed){
 				_speed = 1f; 
 				Debug.Log("Speed = " + _speed); 
 			}
 			else{
 				_speed = 0.2f; 
-
 			}
 			lastTapTime = Time.time;
 			//_speed /= 3f; 
-			Debug.Log("Speed = " + _speed); 
+			Debug.Log("Speed = " + _speed); */
+
 		}
 			
 
 		if(Input.GetKeyDown(KeyCode.UpArrow) && _moveState == MoveState.STOPPED) {
-
+			if(runReleased)
+				myRenderer.sprite = sprites[2]; 
 			_facingDirection = FacingDirection.UP;
 			_moveState = MoveState.CHECK_MOVE;
 			_checkMoveDirection = Vector2.up;
 
 		} else if(Input.GetKeyDown(KeyCode.DownArrow) && _moveState == MoveState.STOPPED) {
-
+			if(runReleased)
+				myRenderer.sprite = sprites[0]; 
 			_checkMoveDirection = -1.0f * Vector2.up;
 			_facingDirection = FacingDirection.DOWN;
 			_moveState = MoveState.CHECK_MOVE;
 
 		} else if(Input.GetKeyDown(KeyCode.RightArrow) && _moveState == MoveState.STOPPED) {
-
+			if(runReleased)
+				myRenderer.sprite = sprites[1]; 
 			_facingDirection = FacingDirection.RIGHT;
 			_moveState = MoveState.CHECK_MOVE;
 			_checkMoveDirection = Vector2.right;
 
 		} else if(Input.GetKeyDown(KeyCode.LeftArrow) && _moveState == MoveState.STOPPED) {
-
+			if(runReleased)
+				myRenderer.sprite = sprites[3]; 
 			_facingDirection = FacingDirection.LEFT;
 			_moveState = MoveState.CHECK_MOVE;
 			_checkMoveDirection = -1.0f * Vector2.right;
@@ -122,8 +151,10 @@ public class BackUpMovement : MonoBehaviour {
 				_destination.y += _moveDistance;
 			} else if (_facingDirection == FacingDirection.DOWN) {
 				_destination.y -= _moveDistance;
+
 			} else if (_facingDirection == FacingDirection.LEFT) {
 				_destination.x -= _moveDistance;
+
 			} else if (_facingDirection == FacingDirection.RIGHT) {
 				_destination.x += _moveDistance;
 			}
@@ -140,9 +171,26 @@ public class BackUpMovement : MonoBehaviour {
 	void LerpToDestination() {
 		_distanceCoveredToDestination += Time.deltaTime * _speed;
 		float fracJourney = _distanceCoveredToDestination / _distanceToDestination;
-		
 		gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, _destination, fracJourney);
-		
+
+		switch (_facingDirection) {
+		case FacingDirection.NEUTRAL: 
+			myRenderer.sprite = sprites[0]; 
+			break;
+		case FacingDirection.DOWN: 
+			myRenderer.sprite = sprites[4]; 
+			break;
+		case FacingDirection.UP: 
+			myRenderer.sprite = sprites[6]; 
+			break; 
+		case FacingDirection.LEFT:
+			myRenderer.sprite = sprites[7]; 
+			break;
+		case FacingDirection.RIGHT:
+			myRenderer.sprite = sprites[5]; 
+			break; 
+				}
+
 		if ((_destination - gameObject.transform.position).sqrMagnitude < 0.01f) {
 			gameObject.transform.position = _destination;
 			_distanceCoveredToDestination = 0.0f;
