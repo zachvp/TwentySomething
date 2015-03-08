@@ -13,6 +13,10 @@ public class BackUpMovement : MonoBehaviour {
 
 	public float _speed = 0.4f;
 
+	//testing out double tap to run
+	public float tapSpeed = 0.5f;
+	private float lastTapTime = 0f; 
+
 	enum FacingDirection { NEUTRAL, UP, DOWN, LEFT, RIGHT };
 	FacingDirection _facingDirection;
 	
@@ -36,6 +40,7 @@ public class BackUpMovement : MonoBehaviour {
 	void Awake() {
 		_moveState = MoveState.STOPPED;
 		_senseState = SenseState.NONE;
+		lastTapTime = 0f; 
 	}
 	
 	// Use this for initialization
@@ -49,7 +54,19 @@ public class BackUpMovement : MonoBehaviour {
 		//check if player has let go of the move button
 		if(Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow)) {
 			runReleased = true;
+			if((Time.time - lastTapTime) < tapSpeed){
+				_speed = 1f; 
+				Debug.Log("Speed = " + _speed); 
+			}
+			else{
+				_speed = 0.2f; 
+
+			}
+			lastTapTime = Time.time;
+			//_speed /= 3f; 
+			Debug.Log("Speed = " + _speed); 
 		}
+			
 
 		if(Input.GetKeyDown(KeyCode.UpArrow) && _moveState == MoveState.STOPPED) {
 
