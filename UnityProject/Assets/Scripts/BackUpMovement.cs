@@ -20,25 +20,28 @@ public class BackUpMovement : MonoBehaviour {
 	public float tapSpeed = 0.5f;
 	private float lastTapTime = 0f; 
 
-	enum FacingDirection { NEUTRAL, UP, DOWN, LEFT, RIGHT };
-	FacingDirection _facingDirection;
+	private enum FacingDirection { NEUTRAL, UP, DOWN, LEFT, RIGHT };
+	private FacingDirection _facingDirection;
 	
-	enum MoveState { STOPPED, CHECK_MOVE, MOVE, MOVING };
-	MoveState _moveState;
+	private enum MoveState { STOPPED, CHECK_MOVE, MOVE, MOVING };
+	private  MoveState _moveState;
 
-	enum SenseState { NONE, INTERACT };
-	SenseState _senseState;
-	bool runReleased;
+	private enum SenseState { NONE, CHECK, INTERACT, INTERACTING, END_INTERACTION };
+	private SenseState _senseState;
 
-	RaycastHit2D _checkMove;
-	Vector2 _checkMoveDirection;
-	float _checkMoveDistance = 1.0f;
+	private RaycastHit2D _checkMove;
+	private Vector2 _checkMoveDirection;
+	private float _checkMoveDistance = 1.0f;
 	
-	Vector3 _destination;
-	float _moveDistance = 1.0f;
+	private Vector3 _destination;
+	private float _moveDistance = 1.0f;
 	
-	float _distanceToDestination = 0.0f;
-	float _distanceCoveredToDestination = 0.0f;
+	private float _distanceToDestination = 0.0f;
+	private float _distanceCoveredToDestination = 0.0f;
+
+	// Component references
+	private TSDialogueController _dialogueController;
+	private TSDialogueInteractible _dialogueThing;
 	
 	void Awake() {
 		_moveState = MoveState.STOPPED;
@@ -49,104 +52,101 @@ public class BackUpMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_destination = gameObject.transform.position;
-		myRenderer = gameObject.GetComponent<SpriteRenderer>(); 
+
+		myRenderer = GetComponent<SpriteRenderer>(); 
+		_dialogueController = GetComponent<TSDialogueController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
 		if (_moveState == MoveState.STOPPED) {
+			if (_senseState == SenseState.NONE) {
+				if(Input.GetKey(KeyCode.UpArrow)) {
+					_facingDirection = FacingDirection.UP;
+					_moveState = MoveState.CHECK_MOVE;
+
+					_checkMoveDirection = Vector2.up;
+				
+				} else if(Input.GetKey(KeyCode.DownArrow)) {
+					_facingDirection = FacingDirection.DOWN;
+					_moveState = MoveState.CHECK_MOVE;
+
+					_checkMoveDirection = -Vector2.up;
+				
+				} else if(Input.GetKey(KeyCode.RightArrow)) {
+					_facingDirection = FacingDirection.RIGHT;
+					_moveState = MoveState.CHECK_MOVE;
+
+					_checkMoveDirection = Vector2.right;
+				
+				} else if(Input.GetKey(KeyCode.LeftArrow)) {
+					_facingDirection = FacingDirection.LEFT;
+					_moveState = MoveState.CHECK_MOVE;
+
+					_checkMoveDirection = -Vector2.right;
+				
+				} else {
+					// no movement buttons are pressed
+				}
+			}
+
+			// set sense state
+			if (Input.GetKeyDown(KeyCode.Space)) {
+				//Debug.Log(gameObject.name + ": pressed space " + _senseState.ToString());
+				
+				if (_senseState == SenseState.NONE) {
+					//Debug.Log(gameObject.name + ": check interaction");
+					
+					_senseState = SenseState.CHECK;
+				} else if (_senseState == SenseState.INTERACTING) {
+					//Debug.Log (gameObject.name + ": end interaction");
+					
+					_senseState = SenseState.END_INTERACTION;
+				} else {
+					_senseState = SenseState.NONE;
+				}
+			}
+
+			// set the sprite
 			switch (_facingDirection) {
-			case FacingDirection.NEUTRAL: 
-				myRenderer.sprite = sprites[0]; 
-				break;
-			case FacingDirection.DOWN: 
-				myRenderer.sprite = sprites[0]; 
-				break;
-			case FacingDirection.UP: 
-				myRenderer.sprite = sprites[2]; 
-				break; 
-			case FacingDirection.LEFT:
-				myRenderer.sprite = sprites[3]; 
-				break;
-			case FacingDirection.RIGHT:
-				myRenderer.sprite = sprites[1]; 
-				break; 
+				case FacingDirection.NEUTRAL: 
+					myRenderer.sprite = sprites[0]; 
+					break;
+				case FacingDirection.DOWN: 
+					myRenderer.sprite = sprites[0]; 
+					break;
+				case FacingDirection.UP: 
+					myRenderer.sprite = sprites[2]; 
+					break; 
+				case FacingDirection.LEFT:
+					myRenderer.sprite = sprites[3]; 
+					break;
+				case FacingDirection.RIGHT:
+					myRenderer.sprite = sprites[1]; 
+					break; 
 			}
-		}
-
-		//check if player has let go of the move button
-		if(Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow)) {
-			runReleased = true;
-			/*
-			if((Time.time - lastTapTime) < tapSpeed){
-				_speed = 1f; 
-				Debug.Log("Speed = " + _speed); 
-			}
-			else{
-				_speed = 0.2f; 
-			}
-			lastTapTime = Time.time;
-			//_speed /= 3f; 
-			Debug.Log("Speed = " + _speed); */
-
-		}
-			
-
-		if(Input.GetKeyDown(KeyCode.UpArrow) && _moveState == MoveState.STOPPED) {
-			if(runReleased)
-				myRenderer.sprite = sprites[2]; 
-			_facingDirection = FacingDirection.UP;
-			_moveState = MoveState.CHECK_MOVE;
-			_checkMoveDirection = Vector2.up;
-
-		} else if(Input.GetKeyDown(KeyCode.DownArrow) && _moveState == MoveState.STOPPED) {
-			if(runReleased)
-				myRenderer.sprite = sprites[0]; 
-			_checkMoveDirection = -1.0f * Vector2.up;
-			_facingDirection = FacingDirection.DOWN;
-			_moveState = MoveState.CHECK_MOVE;
-
-		} else if(Input.GetKeyDown(KeyCode.RightArrow) && _moveState == MoveState.STOPPED) {
-			if(runReleased)
-				myRenderer.sprite = sprites[1]; 
-			_facingDirection = FacingDirection.RIGHT;
-			_moveState = MoveState.CHECK_MOVE;
-			_checkMoveDirection = Vector2.right;
-
-		} else if(Input.GetKeyDown(KeyCode.LeftArrow) && _moveState == MoveState.STOPPED) {
-			if(runReleased)
-				myRenderer.sprite = sprites[3]; 
-			_facingDirection = FacingDirection.LEFT;
-			_moveState = MoveState.CHECK_MOVE;
-			_checkMoveDirection = -1.0f * Vector2.right;
-
 		}
 
 		// Set the move state
 		if (_moveState == MoveState.CHECK_MOVE) {
-			runReleased = false;
-			_checkMove = Physics2D.Raycast(gameObject.transform.position, _checkMoveDirection, _checkMoveDistance);
-			//Debug.Log(gameObject.name + ": checkMove" + _checkMove.rigidbody.ToString());
-			if (_checkMove.rigidbody == null) {
+			CheckFrontObject();
+
+			if (_checkMove) {
 				// can move in the direction
-				_moveState = MoveState.MOVE;
-			} else {
 				// check the type of object in front of the player
 				_moveState = MoveState.STOPPED;
-				string objectTag = _checkMove.rigidbody.tag;
-				if (objectTag.Equals("wall")) {
+				
+				if (_checkMove.collider.CompareTag("wall")) {
+					// Debug.Log (gameObject.name + ": wall ahead!");
 					_senseState = SenseState.NONE;
 				}
-				if (objectTag.Equals("thing")) {
-					_senseState = SenseState.INTERACT;
-				}
+			} else {
+				//Debug.Log (gameObject.name + ": it's so null!");
+				_moveState = MoveState.MOVE;
 			}
-		}
-
-
-		if (_moveState == MoveState.MOVE) {
+		} else if (_moveState == MoveState.MOVE) {
 			_destination = gameObject.transform.position;
+
 			if (_facingDirection == FacingDirection.UP) {
 				_destination.y += _moveDistance;
 			} else if (_facingDirection == FacingDirection.DOWN) {
@@ -164,11 +164,50 @@ public class BackUpMovement : MonoBehaviour {
 			_moveState = MoveState.MOVING;
 		} else if (_moveState == MoveState.MOVING) {
 			LerpToDestination();
+
+			// check if entity is at destination
+			if ((_destination - gameObject.transform.position).sqrMagnitude < 0.01f) {
+				gameObject.transform.position = _destination;
+				_distanceCoveredToDestination = 0.0f;
+
+				_moveState = MoveState.STOPPED;
+			}
 		}
-		
+
+		// check the sense states
+		if (_senseState == SenseState.CHECK) {
+			CheckFrontObject();
+
+			if (_checkMove) {
+				if(_checkMove.collider.CompareTag("thing")) {
+					//Debug.Log (gameObject.name + ": Interact with thing");
+					_senseState = SenseState.INTERACT;
+
+					_dialogueThing = _checkMove.collider.GetComponent<TSDialogueInteractible>();
+				} else {
+					_senseState = SenseState.NONE;
+				}
+			}
+		} else if (_senseState == SenseState.INTERACT) {
+			//Debug.Log (gameObject.name + ": Interacting");
+			_senseState = SenseState.INTERACTING;
+
+			_dialogueController.Parse(_dialogueThing.dialogueFile);
+		} else if (_senseState == SenseState.END_INTERACTION) {
+			//Debug.Log(gameObject.name + ": End interaction");
+
+			_moveState = MoveState.STOPPED;
+			_senseState = SenseState.NONE;
+
+			_dialogueController.EndDialogue();
+		}
+	}
+
+	private void CheckFrontObject() {
+		_checkMove = Physics2D.Raycast(gameObject.transform.position, _checkMoveDirection, _checkMoveDistance);
 	}
 	
-	void LerpToDestination() {
+	private void LerpToDestination() {
 		_distanceCoveredToDestination += Time.deltaTime * _speed;
 		float fracJourney = _distanceCoveredToDestination / _distanceToDestination;
 		gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, _destination, fracJourney);
@@ -188,19 +227,7 @@ public class BackUpMovement : MonoBehaviour {
 			break;
 		case FacingDirection.RIGHT:
 			myRenderer.sprite = sprites[5]; 
-			break; 
-				}
-
-		if ((_destination - gameObject.transform.position).sqrMagnitude < 0.01f) {
-			gameObject.transform.position = _destination;
-			_distanceCoveredToDestination = 0.0f;
-
-			//check if key is still held down
-			if(!runReleased) 
-				_moveState = MoveState.CHECK_MOVE;
-			else 
-				_moveState = MoveState.STOPPED;
-
+			break;
 		}
 	}
 	

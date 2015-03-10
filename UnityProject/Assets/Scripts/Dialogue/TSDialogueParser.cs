@@ -27,14 +27,11 @@ namespace Dialogue {
 		public static TSDialogueParser Instance { get { return _instance; } }
 
 		public TSDialogueData Parse(string filename) {
-			Console.Write("Parse ");
-			Console.WriteLine(filename);
+			debug = "";
 
 			XmlDocument doc = new XmlDocument();
 			_path = Directory.GetParent(Environment.CurrentDirectory).FullName + 
 				   kPathToXMLDirectory + filename + kXMLExtension;
-			//debug = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase );
-			//debug = System.IO.Path.GetDirectoryName(
 			doc.Load(_path);
 
 			XmlNode rootNode = doc.DocumentElement.SelectSingleNode("/" + kDialogueNodeName);
