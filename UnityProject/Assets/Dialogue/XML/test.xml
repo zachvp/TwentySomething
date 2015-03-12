@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialogue>
-    <title> NPC - Esteban </title>
+    <header> NPC - Esteban </header>
     <body> Do you like hugs? </body>
     <choice stamina="5"> Of course </choice>
     <choice> YES </choice>

@@ -16,7 +16,7 @@ namespace Dialogue {
 		private const string kXMLExtension 		 = ".xml";
 
 		private const string kDialogueNodeName   = "dialogue";
-		private const string kTitleNodeName   	 = "title";
+		private const string kHeaderNodeName   	 = "header";
 		private const string kBodyNodeName 		 = "body";
 		private const string kChoiceNodeName 	 = "choice";
 
@@ -27,19 +27,16 @@ namespace Dialogue {
 		public static TSDialogueParser Instance { get { return _instance; } }
 
 		public TSDialogueData Parse(string filename) {
-			Console.Write("Parse ");
-			Console.WriteLine(filename);
+			debug = "";
 
 			XmlDocument doc = new XmlDocument();
 			_path = Directory.GetParent(Environment.CurrentDirectory).FullName + 
 				   kPathToXMLDirectory + filename + kXMLExtension;
-			//debug = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase );
-			//debug = System.IO.Path.GetDirectoryName(
 			doc.Load(_path);
 
 			XmlNode rootNode = doc.DocumentElement.SelectSingleNode("/" + kDialogueNodeName);
 
-			XmlNode titleNode = rootNode.SelectSingleNode(kTitleNodeName); debug += titleNode.InnerText + "\n";
+			XmlNode titleNode = rootNode.SelectSingleNode(kHeaderNodeName); debug += titleNode.InnerText + "\n";
 			XmlNode bodyNode = rootNode.SelectSingleNode(kBodyNodeName); debug += bodyNode.InnerText + "\n\n";
 			
 			XmlNodeList choiceNodes = rootNode.SelectNodes(kChoiceNodeName);
