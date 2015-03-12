@@ -41,7 +41,9 @@ public class BackUpMovement : MonoBehaviour {
 
 	// Component references
 	private TSDialogueController _dialogueController;
-	private TSDialogueInteractible _dialogueThing;
+
+	// Other references
+	private TSDialogueThing _dialogueThing;
 	
 	void Awake() {
 		_moveState = MoveState.STOPPED;
@@ -183,7 +185,7 @@ public class BackUpMovement : MonoBehaviour {
 					//Debug.Log (gameObject.name + ": Interact with thing");
 					_senseState = SenseState.INTERACT;
 
-					_dialogueThing = _checkMove.collider.GetComponent<TSDialogueInteractible>();
+					_dialogueThing = _checkMove.collider.GetComponent<TSDialogueThing>();
 				} else {
 					_senseState = SenseState.NONE;
 				}
@@ -192,7 +194,7 @@ public class BackUpMovement : MonoBehaviour {
 			//Debug.Log (gameObject.name + ": Interacting");
 			_senseState = SenseState.INTERACTING;
 
-			_dialogueController.Parse(_dialogueThing.dialogueFile);
+			_dialogueController.Parse(_dialogueThing.filename);
 		} else if (_senseState == SenseState.END_INTERACTION) {
 			//Debug.Log(gameObject.name + ": End interaction");
 
