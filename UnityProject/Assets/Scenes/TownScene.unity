@@ -87,7 +87,7 @@ GameObject:
   - 61: {fileID: 2579087}
   - 114: {fileID: 2579089}
   m_Layer: 0
-  m_Name: Thing
+  m_Name: DialogueThing
   m_TagString: thing
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,10 +151,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2579084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6b768fedf45b0c4ba5d41589e150ab0, type: 3}
+  m_Script: {fileID: 11500000, guid: efd44515ca7051c4690181374764fa3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueFile: test
+  filename: test
 --- !u!1001 &20878274
 Prefab:
   m_ObjectHideFlags: 0
