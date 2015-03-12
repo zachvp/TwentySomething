@@ -16,7 +16,7 @@ namespace Dialogue {
 		private const string kXMLExtension 		 = ".xml";
 
 		private const string kDialogueNodeName   = "dialogue";
-		private const string kTitleNodeName   	 = "title";
+		private const string kHeaderNodeName   	 = "header";
 		private const string kBodyNodeName 		 = "body";
 		private const string kChoiceNodeName 	 = "choice";
 
@@ -36,7 +36,7 @@ namespace Dialogue {
 
 			XmlNode rootNode = doc.DocumentElement.SelectSingleNode("/" + kDialogueNodeName);
 
-			XmlNode titleNode = rootNode.SelectSingleNode(kTitleNodeName); debug += titleNode.InnerText + "\n";
+			XmlNode titleNode = rootNode.SelectSingleNode(kHeaderNodeName); debug += titleNode.InnerText + "\n";
 			XmlNode bodyNode = rootNode.SelectSingleNode(kBodyNodeName); debug += bodyNode.InnerText + "\n\n";
 			
 			XmlNodeList choiceNodes = rootNode.SelectNodes(kChoiceNodeName);
