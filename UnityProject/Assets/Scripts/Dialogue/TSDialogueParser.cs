@@ -9,7 +9,8 @@ namespace Dialogue {
 
 		private static readonly TSDialogueParser _instance = new TSDialogueParser();
 
-		private static string _path;
+		private static XmlDocument _doc;
+		private static XmlNode _rootNode;
 		private static int _lastID = 0;
 
 		private const string kPathToXMLDirectory = "/UnityProject/Assets/Dialogue/XML/";
@@ -22,31 +23,40 @@ namespace Dialogue {
 
 		private const string kStaminaAttributeName = "stamina";
 			
-		private TSDialogueParser () {}
+		private TSDialogueParser ()
+		{
+			_doc = new XmlDocument();
+		}
 
 		public static TSDialogueParser Instance { get { return _instance; } }
 
-		public TSDialogueData Parse(string filename) {
-			debug = "";
+		public TSDialogueHeaderData ParseHeader(string filename) {
+			InitParse(filename);
 
-			XmlDocument doc = new XmlDocument();
-			_path = Directory.GetParent(Environment.CurrentDirectory).FullName + 
-				   kPathToXMLDirectory + filename + kXMLExtension;
-			doc.Load(_path);
+			XmlNode headerNode = _rootNode.SelectSingleNode(kHeaderNodeName); debug += headerNode.InnerText + "\n";
+			string header = headerNode.InnerText;
+			TSDialogueData data = new TSDialogueData(_lastID++);
 
-			XmlNode rootNode = doc.DocumentElement.SelectSingleNode("/" + kDialogueNodeName);
+			return new TSDialogueHeaderData(data, header);
+		}
 
-			XmlNode titleNode = rootNode.SelectSingleNode(kHeaderNodeName); debug += titleNode.InnerText + "\n";
-			XmlNode bodyNode = rootNode.SelectSingleNode(kBodyNodeName); debug += bodyNode.InnerText + "\n\n";
-			
-			XmlNodeList choiceNodes = rootNode.SelectNodes(kChoiceNodeName);
+		public TSDialogueBodyData ParseBody(string filename) {
+			InitParse(filename);
 
-			string title, body;
+			XmlNode bodyNode = _rootNode.SelectSingleNode(kBodyNodeName); debug += bodyNode.InnerText + "\n\n";
+			string body = bodyNode.InnerText;
+			TSDialogueData data = new TSDialogueData(_lastID++);
+
+			return new TSDialogueBodyData(data, body);
+		}
+
+		public TSDialogueChoiceData ParseChoices(string filename) {
+			InitParse(filename);
+
 			List<string> choices = new List<string>();
-			Dictionary<TSDialogueData.Attributes, int> attributesToValues = new Dictionary<TSDialogueData.Attributes, int>();
-
-			title = titleNode.InnerText;
-			body = bodyNode.InnerText;
+			Dictionary<TSDialogueChoiceData.Attributes, int> attributesToValues = new Dictionary<TSDialogueChoiceData.Attributes, int>();
+			XmlNodeList choiceNodes = _rootNode.SelectNodes(kChoiceNodeName);
+			TSDialogueData data = new TSDialogueData(_lastID++);
 
 			foreach (XmlNode choice in choiceNodes) {
 				debug += choice.InnerText;
@@ -54,12 +64,24 @@ namespace Dialogue {
 				if (choice.Attributes[kStaminaAttributeName] != null) {
 					int value = 0;
 					Int32.TryParse(choice.Attributes[kStaminaAttributeName].Value, out value);
-					attributesToValues.Add(TSDialogueData.Attributes.STAMINA, value);
+					attributesToValues.Add(TSDialogueChoiceData.Attributes.STAMINA, value);
+
 					debug += " - " + choice.Attributes[kStaminaAttributeName].Value.ToString() + " stamina\n";
 				}
 			}
 
-			return new TSDialogueData(_lastID++, title, body, choices, attributesToValues);
+			return new TSDialogueChoiceData(data, choices, attributesToValues);
+		}
+
+		private void InitParse(string filename) {
+			debug = "";
+
+			// read file
+			string path = Directory.GetParent(Environment.CurrentDirectory).FullName + 
+							kPathToXMLDirectory + filename + kXMLExtension;
+			_doc.Load(path);
+			
+			_rootNode = _doc.DocumentElement.SelectSingleNode("/" + kDialogueNodeName);
 		}
 	}
 }

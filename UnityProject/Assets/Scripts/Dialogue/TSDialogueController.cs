@@ -8,13 +8,15 @@ public class TSDialogueController : MonoBehaviour {
 	public Text textBody;
 	public Text textChoices;
 
-	private TSDialogueData _dialogueData;
+	private TSDialogueHeaderData _headerData;
+	private TSDialogueBodyData _bodyData;
+	private TSDialogueChoiceData _choiceData;
 
 	private enum State { ENABLED, DISABLED };
 
 	// Use this for initialization
 	void Start () {
-
+		ClearUI();
 	}
 	
 	// Update is called once per frame
@@ -23,22 +25,26 @@ public class TSDialogueController : MonoBehaviour {
 
 	// public methods
 	public void Parse(string filename) {
-		_dialogueData = TSDialogueParser.Instance.Parse(filename);
-		
-		// update the UI
-		textBody.text = _dialogueData.Body;
-		textHeader.text = _dialogueData.Header;
+		_headerData = TSDialogueParser.Instance.ParseHeader(filename);
+		_bodyData   = TSDialogueParser.Instance.ParseBody(filename);
+		_choiceData = TSDialogueParser.Instance.ParseChoices(filename);
 
-		textChoices.text = "";
-		foreach (string choice in _dialogueData.Choices) {
-			textChoices.text += choice;
-			textChoices.text += "\n";
-		}
-		//textOptions.text = 
+		UpdateUI();
 	}
 
 	public void EndDialogue() {
 		ClearUI();
+	}
+
+	private void UpdateUI() {
+		textHeader.text = _headerData.Header;
+		textBody.text = _bodyData.Body;
+		
+		textChoices.text = "";
+		foreach (string choice in _choiceData.Choices) {
+			textChoices.text += choice;
+			textChoices.text += "\n";
+		}
 	}
 
 	private void ClearUI() {
