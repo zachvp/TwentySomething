@@ -10,11 +10,14 @@ public class Paintball : MonoBehaviour {
 
 	public PaintCanvas canvas;
 
+	public float distanceTravelled;
+	Vector3 lastPosition;
+
 
 	
 	// Use this for initialization
 	void Start () {
-
+		lastPosition = transform.position;
 	}
 
 
@@ -22,6 +25,8 @@ public class Paintball : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		distanceTravelled += Vector3.Distance (transform.position, lastPosition);
+		lastPosition = transform.position;
 
 		//if (Input.GetMouseButtonDown (0) || Input.GetMouseButton (0) && canFollow) {
 		if (Input.GetMouseButton (0) && canFollow) {
