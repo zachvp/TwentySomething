@@ -1,16 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BackUpMovement : MonoBehaviour {
-
-	/* 1) GetKeyDown
-	 * 2) Set Direction
-	 * 3) Determine Destination
-	 * 4) Check Destination
-	 * 5) Move to Destination
-	 * 6) If key still down repeat from 3)
-	 */
-
+public class TSCharacterMovement : MonoBehaviour {
 	public float _speed = 0.4f;
 
 	public Sprite[] sprites; 
