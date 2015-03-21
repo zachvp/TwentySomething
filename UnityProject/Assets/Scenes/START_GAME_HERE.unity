@@ -169,7 +169,7 @@ GameObject:
   - 4: {fileID: 1948196374}
   - 114: {fileID: 1948196373}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: GameManagerA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,6 +191,7 @@ MonoBehaviour:
   p_stamina: 0
   p_staminaRate: 0
   timeLeft: 0
+  stepsTaken: 0
 --- !u!4 &1948196374
 Transform:
   m_ObjectHideFlags: 0

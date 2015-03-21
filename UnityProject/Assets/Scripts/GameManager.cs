@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour {
 	public float p_staminaRate; 
 	public float timeLeft; 
 
+	public int stepsTaken = 0;
+
 	void Awake () {
 		DontDestroyOnLoad (this); 
 		}
@@ -25,10 +27,22 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//prevent the players stamina from exceeding current max stamina. 
 		if (p_stamina > p_maxStamina) {
 			p_stamina =  p_maxStamina; 
 				}
-		//Debug.Log("Update time :" + Time.deltaTime);
+		//decrement stamina VERY TEMP SOLUTION, JUST TESTING IF THIS WORKS
+		if (stepsTaken >= 10) {
+			stepsTaken = 0; 
+			p_stamina--; 
+				}
+
+
+		//test fail conditons, change to appropiate situations. 
+		if (timeLeft <= 0f || p_stamina <= 0f) {
+			Debug.Log("Out of Time/Stamina"); 
+			Application.LoadLevel("START_GAME_HERE"); 
+				}
 	}
 
 	void FixedUpdate() {

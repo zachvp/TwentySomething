@@ -45,6 +45,8 @@ public class BackUpMovement : MonoBehaviour {
 	// Other references
 	private TSDialogueThing _dialogueThing;
 	
+	public GameObject manager; 
+
 	void Awake() {
 		_moveState = MoveState.STOPPED;
 		_senseState = SenseState.NONE;
@@ -57,8 +59,9 @@ public class BackUpMovement : MonoBehaviour {
 
 		myRenderer = GetComponent<SpriteRenderer>(); 
 		_dialogueController = GetComponent<TSDialogueController>();
+		manager = GameObject.Find("GameManagerA"); 
 	}
-	
+	 
 	// Update is called once per frame
 	void Update () {
 		if (_moveState == MoveState.STOPPED) {
@@ -166,7 +169,7 @@ public class BackUpMovement : MonoBehaviour {
 			_moveState = MoveState.MOVING;
 		} else if (_moveState == MoveState.MOVING) {
 			LerpToDestination();
-
+			manager.GetComponent<GameManager> ().stepsTaken++; 
 			// check if entity is at destination
 			if ((_destination - gameObject.transform.position).sqrMagnitude < 0.01f) {
 				gameObject.transform.position = _destination;
@@ -213,6 +216,7 @@ public class BackUpMovement : MonoBehaviour {
 		_distanceCoveredToDestination += Time.deltaTime * _speed;
 		float fracJourney = _distanceCoveredToDestination / _distanceToDestination;
 		gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, _destination, fracJourney);
+	
 
 		switch (_facingDirection) {
 		case FacingDirection.NEUTRAL: 
