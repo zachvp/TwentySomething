@@ -6,7 +6,7 @@ public class Door : MonoBehaviour {
 	public GameObject player; 
 	// Use this for initialization
 	void Start () {
-		player = GameObject.FindGameObjectWithTag ("player"); 
+//		player = GameObject.FindGameObjectWithTag ("player"); 
 	}
 	
 	// Update is called once per frame
