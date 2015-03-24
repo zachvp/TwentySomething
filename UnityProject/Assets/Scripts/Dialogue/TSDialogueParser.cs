@@ -53,24 +53,29 @@ namespace Dialogue {
 		public TSDialogueChoiceData ParseChoices(string filename) {
 			InitParse(filename);
 
-			List<string> choices = new List<string>();
-			Dictionary<TSDialogueChoiceData.Attributes, int> attributesToValues = new Dictionary<TSDialogueChoiceData.Attributes, int>();
+			//List<string> choices = new List<string>();
+			List<Choice> choices = new List<Choice>();
 			XmlNodeList choiceNodes = _rootNode.SelectNodes(kChoiceNodeName);
 			TSDialogueData data = new TSDialogueData(_lastID++);
+			int index = 0;
 
-			foreach (XmlNode choice in choiceNodes) {
-				debug += choice.InnerText;
-				choices.Add(choice.InnerText);
-				if (choice.Attributes[kStaminaAttributeName] != null) {
+			foreach (XmlNode choiceNode in choiceNodes) {
+				debug += choiceNode.InnerText;
+				Choice choice = new Choice(choiceNode.InnerText, 0);
+
+				if (choiceNode.Attributes[kStaminaAttributeName] != null) {
 					int value = 0;
-					Int32.TryParse(choice.Attributes[kStaminaAttributeName].Value, out value);
-					attributesToValues.Add(TSDialogueChoiceData.Attributes.STAMINA, value);
+					Int32.TryParse(choiceNode.Attributes[kStaminaAttributeName].Value, out value);
+					choice._attributeValue = value;
 
-					debug += " - " + choice.Attributes[kStaminaAttributeName].Value.ToString() + " stamina\n";
+					debug += " - " + choiceNode.Attributes[kStaminaAttributeName].Value.ToString() + " stamina\n";
 				}
+
+				choices.Add(choice);
+				index += 1;
 			}
 
-			return new TSDialogueChoiceData(data, choices, attributesToValues);
+			return new TSDialogueChoiceData(data, choices);
 		}
 
 		private void InitParse(string filename) {

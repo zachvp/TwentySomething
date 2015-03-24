@@ -1,69 +1,37 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.UI;
-
-using Dialogue;
+using System.Collections;
 
 public class TSDialogueChoiceController : MonoBehaviour {
-	//public RectTransform panel;
-	//public Text textChoices;
+	public delegate void CycleForwardAction(TSDialogueChoiceController choiceController);
+	public static event CycleForwardAction CycleForwardEvent;
 
-	private RectTransform panel;
-	private List<Text> _UIChoices;
+	public delegate void CycleBackwardAction(TSDialogueChoiceController choiceController);
+	public static event CycleForwardAction CycleBackwardEvent;
 
-	private TSDialogueChoiceData _choiceData;
-
-	void Awake() {
-		_UIChoices = new List<Text>();
-	}
+	public delegate void SelectAction(TSDialogueChoiceController choiceController);
+	public static event SelectAction SelectEvent;
 
 	// Use this for initialization
 	void Start () {
-		//Parse("test");
-		//UpdateUI();
-		panel = GameObject.FindGameObjectWithTag("choicePanel").GetComponent<RectTransform>();
+	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-
-	public void Parse (string filename) {
-		_choiceData = TSDialogueParser.Instance.ParseChoices(filename);
-
-		float offset = 16;
-		Vector2 adjustedPosition = panel.position;
-		adjustedPosition.y += offset;
-
-		foreach (string choice in _choiceData.Choices) {
-			//textChoices.text += choice;
-			//textChoices.text += "\n";
-			Text choiceText = Instantiate(Resources.Load("DialogueChoice", typeof(Text))) as Text;
-
-			choiceText.text = choice;
-
-			choiceText.transform.SetParent(panel);
-			choiceText.transform.position = adjustedPosition;
-
-			adjustedPosition.y -= choiceText.rectTransform.rect.height;
-			
-			_UIChoices.Add(choiceText);
-		}
-	}
-
-	private void UpdateUI() {
-		//textChoices.text = "";
-
-	}
-
-	public void ClearUI() {
-		foreach (Text text in _UIChoices) {
-			text.text = "";
-			Destroy(text.gameObject);
+		if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.RightArrow)) {
+			if (CycleForwardEvent != null) {
+				CycleForwardEvent(this);
+			}
+		} else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+			if (CycleBackwardEvent != null) {
+				CycleBackwardEvent(this);
+			}
 		}
 
-		Resources.UnloadUnusedAssets();
-		_UIChoices.Clear();
+		if (Input.GetKeyDown(KeyCode.Return)) {
+			if (SelectEvent != null) {
+				SelectEvent(this);
+			}
+		}
 	}
 }

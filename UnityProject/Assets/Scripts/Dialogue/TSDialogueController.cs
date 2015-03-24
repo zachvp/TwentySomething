@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Dialogue;
@@ -7,7 +7,7 @@ public class TSDialogueController : MonoBehaviour {
 	public Text textHeader;
 	public Text textBody;
 
-	private TSDialogueChoiceController _choiceController;
+	private TSDialogueChoiceView _choiceView;
 
 	private TSDialogueHeaderData _headerData;
 	private TSDialogueBodyData _bodyData;
@@ -16,7 +16,9 @@ public class TSDialogueController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		_choiceController = gameObject.AddComponent<TSDialogueChoiceController>();
+		_choiceView = gameObject.AddComponent<TSDialogueChoiceView>();
+
+		TSDialogueChoiceController.SelectEvent += HandleSelectEvent;
 
 		ClearUI();
 	}
@@ -30,7 +32,7 @@ public class TSDialogueController : MonoBehaviour {
 	public void Parse(string filename) {
 		_headerData = TSDialogueParser.Instance.ParseHeader(filename);
 		_bodyData   = TSDialogueParser.Instance.ParseBody(filename);
-		_choiceController.Parse(filename);
+		_choiceView.Display(filename);
 
 		UpdateUI();
 	}
@@ -47,7 +49,11 @@ public class TSDialogueController : MonoBehaviour {
 	private void ClearUI() {
 		textHeader.text = "";
 		textBody.text = "";
-		_choiceController.ClearUI();
-		//textChoices.text = "";
+		_choiceView.Hide();
+	}
+
+	// Event handlers
+	void HandleSelectEvent (TSDialogueChoiceController choiceController) {
+		EndDialogue();
 	}
 }

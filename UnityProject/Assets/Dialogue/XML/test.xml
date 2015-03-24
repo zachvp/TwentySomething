@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialogue>
     <header> NPC - Esteban </header>
-    <body> Do you like hugs? </body>
-    <choice stamina="5"> Of course </choice>
-    <choice> YES </choice>
+    <body>Do you like hugs?</body>
+    <choice stamina="5">Of course</choice>
+    <choice>You betcha</choice>
+    <choice>Nope</choice>
 </dialogue>
