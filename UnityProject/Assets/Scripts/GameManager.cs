@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	public int hourOfDay = 0; 
 
 	public int stepsTaken = 0;
+	TextMesh [] uitext;
 
 	void Awake () {
 		DontDestroyOnLoad (this); 
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () { 
+		uitext = GetComponentsInChildren<TextMesh> (); 
 		p_money = 100; 
 		p_maxStamina = 100f;
 		p_stamina = 100f; 
@@ -33,22 +35,16 @@ public class GameManager : MonoBehaviour {
 		if (p_stamina > p_maxStamina) {
 			p_stamina =  p_maxStamina; 
 				}
-		//decrement stamina VERY TEMP SOLUTION, JUST TESTING IF THIS WORKS
-		/*if (stepsTaken >= 10) {
-			stepsTaken = 0; 
-			p_stamina--; 
-				}
 
+		//handle UI objects
 
-		//test fail conditons, change to appropiate situations. 
-	/*	if (timeLeft <= 0f || p_stamina <= 0f) {
-			Debug.Log("Out of Time/Stamina"); 
-			Application.LoadLevel("START_GAME_HERE"); 
-				}*/
 	}
 
+	void OnLevelWasLoaded(
+
 	void FixedUpdate() {
-		timer += 1f; 
+		timer += 1f;
+		p_stamina -= 4;
 		//Debug.Log (timer); 
 
 		if ((int)timer % 60 == 0)
@@ -56,8 +52,15 @@ public class GameManager : MonoBehaviour {
 		if (hourOfDay >= 24)
 			hourOfDay = 0; 
 
+		uitext [0].text = "Stamina: " + p_stamina; 
+		uitext [1].text = "Money: " + p_money; 
+		uitext [2].text = "Time: " + hourOfDay; 
 		 
 		Debug.Log (hourOfDay); 
+	}
+
+	void OnLevelWasLoaded(int level) {
+
 	}
 
 	public void addMoney(int toAdd){
@@ -66,5 +69,9 @@ public class GameManager : MonoBehaviour {
 
 	public void spendMoney(int toSpend){
 		p_money -= toSpend; 
+	}
+
+	public void eat (float staminaGain){
+		p_stamina += staminaGain;
 	}
 }
