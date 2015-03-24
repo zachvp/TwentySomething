@@ -7,7 +7,9 @@ public class GameManager : MonoBehaviour {
 	public float p_maxStamina; 
 	public float p_stamina; 
 	public float p_staminaRate; 
-	public float timeLeft; 
+	public float timer; 
+
+	public int hourOfDay = 0; 
 
 	public int stepsTaken = 0;
 
@@ -21,7 +23,7 @@ public class GameManager : MonoBehaviour {
 		p_maxStamina = 100f;
 		p_stamina = 100f; 
 		p_staminaRate = 1.0f; 
-		timeLeft = 600f; 
+		timer = 0f; 
 		Application.LoadLevel ("Demo"); 
 	}
 	
@@ -32,22 +34,37 @@ public class GameManager : MonoBehaviour {
 			p_stamina =  p_maxStamina; 
 				}
 		//decrement stamina VERY TEMP SOLUTION, JUST TESTING IF THIS WORKS
-		if (stepsTaken >= 10) {
+		/*if (stepsTaken >= 10) {
 			stepsTaken = 0; 
 			p_stamina--; 
 				}
 
 
 		//test fail conditons, change to appropiate situations. 
-		if (timeLeft <= 0f || p_stamina <= 0f) {
+	/*	if (timeLeft <= 0f || p_stamina <= 0f) {
 			Debug.Log("Out of Time/Stamina"); 
 			Application.LoadLevel("START_GAME_HERE"); 
-				}
+				}*/
 	}
 
 	void FixedUpdate() {
-		//Debug.Log("FixedUpdate time: " + Time.deltaTime); 
-		timeLeft -= 1f; 
-		Debug.Log (timeLeft); 
+		timer += 1f; 
+		//Debug.Log (timer); 
+
+		if ((int)timer % 60 == 0)
+			hourOfDay++; 
+		if (hourOfDay >= 24)
+			hourOfDay = 0; 
+
+		 
+		Debug.Log (hourOfDay); 
+	}
+
+	public void addMoney(int toAdd){
+		p_money += toAdd; 
+	}
+
+	public void spendMoney(int toSpend){
+		p_money -= toSpend; 
 	}
 }
