@@ -39,9 +39,11 @@ public class TSCharacterMovement : MonoBehaviour {
 	void Awake() {
 		_moveState = MoveState.STOPPED;
 		_senseState = SenseState.NONE;
-		lastTapTime = 0f; 
+		lastTapTime = 0f;
+
+		TSDialogueChoiceController.SelectEvent += HandleSelectEvent;
 	}
-	
+
 	// Use this for initialization
 	void Start () {
 		_destination = gameObject.transform.position;
@@ -222,6 +224,12 @@ public class TSCharacterMovement : MonoBehaviour {
 			myRenderer.sprite = sprites[5]; 
 			break;
 		}
+	}
+
+	// Event handlers
+	void HandleSelectEvent (TSDialogueChoiceController choiceController)
+	{
+		_senseState = SenseState.END_INTERACTION;
 	}
 	
 }

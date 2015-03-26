@@ -34,4 +34,8 @@ public class TSDialogueChoiceController : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnDestroy () {
+		SelectEvent = null;
+	}
 }
